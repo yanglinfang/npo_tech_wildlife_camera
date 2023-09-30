@@ -35,7 +35,7 @@ def load_image_from_folder(apiUrl, maxRetry = 10):
                 # folderCounts[folderName] = 0
                 load_image_from_folder(subFolderUrl, maxRetry)
             elif item['type'] == 'file':
-                folderName = os.path.dirname(item['path'])
+                folderName = os.path.basename(os.path.dirname(item['path']))
                 folderCounts[folderName] = folderCounts.get(folderName, 0) + 1
 
                 # fileName = item['name']
