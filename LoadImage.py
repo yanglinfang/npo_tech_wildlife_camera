@@ -5,18 +5,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 import datetime
 import cv2
+import authToken
 
 # Github Repo Info
 repoOwner = 'yanglinfang'
 repoName = 'npo_tech_wildlife_camera'
 folderPath = 'dataset'
+myToken = authToken.token
 
 # GitHub API endpoint to list contents of the folder
 apiUrl = f'https://api.github.com/repos/{repoOwner}/{repoName}/contents/{folderPath}'
 
 # OAuth Token used for more data limit
 headers = {
-    'Authorization': 'token '
+    'Authorization': f'token {myToken}'
 }
 
 rate_limit_url = 'https://api.github.com/rate_limit'
