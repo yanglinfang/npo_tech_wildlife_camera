@@ -16,7 +16,7 @@ apiUrl = f'https://api.github.com/repos/{repoOwner}/{repoName}/contents/{folderP
 
 # OAuth Token used for more data limit
 headers = {
-    'Authorization': 'token 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'
+    'Authorization': 'token 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'
 }
 
 rate_limit_url = 'https://api.github.com/rate_limit'
