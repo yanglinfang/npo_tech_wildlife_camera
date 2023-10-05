@@ -22,67 +22,67 @@ headers = {
     'Authorization': f'token {myToken}'
 }
 
-# Database information
-dbName = authInfo.dbName
-dbUser = authInfo.dbUser
-dbPassWord = authInfo.dbPassWord
-dbHost = authInfo.dbHost
-dbPort = authInfo.dbPort
+# # Database information
+# dbName = authInfo.dbName
+# dbUser = authInfo.dbUser
+# dbPassWord = authInfo.dbPassWord
+# dbHost = authInfo.dbHost
+# dbPort = authInfo.dbPort
 
-try:
-    conn = ps.connect(
-        dbname = dbName,
-        user = dbUser,
-        password = dbPassWord,
-        host = dbHost,
-        port = dbPort
-    )
+# try:
+#     conn = ps.connect(
+#         dbname = dbName,
+#         user = dbUser,
+#         password = dbPassWord,
+#         host = dbHost,
+#         port = dbPort
+#     )
 
-    cursor = conn.cursor()
+#     cursor = conn.cursor()
 
-    # Define the table schema
-    create_table_query = '''
-    CREATE TABLE IF NOT EXISTS ImageData (
-        id SERIAL PRIMARY KEY,
-        image_name VARCHAR(255),
-        image_path VARCHAR(255),
-        ave_brightness FLOAT,
-        red_val FLOAT,
-        green_val FLOAT,
-        blue_val FLOAT
-    );
-    '''
+#     # Define the table schema
+#     create_table_query = '''
+#     CREATE TABLE IF NOT EXISTS ImageData (
+#         id SERIAL PRIMARY KEY,
+#         image_name VARCHAR(255),
+#         image_path VARCHAR(255),
+#         ave_brightness FLOAT,
+#         red_val FLOAT,
+#         green_val FLOAT,
+#         blue_val FLOAT
+#     );
+#     '''
 
-    cursor.execute(create_table_query)
+#     cursor.execute(create_table_query)
 
-    conn.commit()
+#     conn.commit()
 
-    # Sample data (replace with actual data)
-    image_name = 'image1.jpg'
-    image_path = '/path/to/image1.jpg'
-    ave_brightness = 0.5
-    red_val = 0.2
-    green_val = 0.8
-    blue_val = 0.4
+#     # Sample data (replace with actual data)
+#     image_name = 'image1.jpg'
+#     image_path = '/path/to/image1.jpg'
+#     ave_brightness = 0.5
+#     red_val = 0.2
+#     green_val = 0.8
+#     blue_val = 0.4
 
-    # SQL INSERT statement
-    insert_query = '''
-    INSERT INTO ImageData (image_name, image_path, ave_brightness, red_val, green_val, blue_val)
-    VALUES (%s, %s, %s, %s, %s, %s);
-    '''
+#     # SQL INSERT statement
+#     insert_query = '''
+#     INSERT INTO ImageData (image_name, image_path, ave_brightness, red_val, green_val, blue_val)
+#     VALUES (%s, %s, %s, %s, %s, %s);
+#     '''
 
-    # Execute the INSERT query with data
-    cursor.execute(insert_query, (image_name, image_path, ave_brightness, red_val, green_val, blue_val))
+#     # Execute the INSERT query with data
+#     cursor.execute(insert_query, (image_name, image_path, ave_brightness, red_val, green_val, blue_val))
 
-    # Commit the changes to the database
-    conn.commit()
+#     # Commit the changes to the database
+#     conn.commit()
 
-    # Close the cursor and connection
-    cursor.close()
-    conn.close()
+#     # Close the cursor and connection
+#     cursor.close()
+#     conn.close()
 
-except Exception as e:
-    print("Error:", e)
+# except Exception as e:
+#     print("Error:", e)
 
 # # Retry times when failed to download image
 # maxRetry = 10
@@ -175,14 +175,14 @@ except Exception as e:
 
 # load_image_from_folder(apiUrl, maxRetry)
 
-# rate_limit_url = 'https://api.github.com/rate_limit'
-# response = requests.get(rate_limit_url, headers=headers)
+rate_limit_url = 'https://api.github.com/rate_limit'
+response = requests.get(rate_limit_url, headers=headers)
 
-# # Check if the request was successful (status code 200)
-# if response.status_code == 200:
-#     # Parse the response JSON to get rate limit information
-#     rate_limit_data = response.json()
-#     print("Rate Limit Data:")
-#     print(rate_limit_data)
-# else:
-#     print(f"Failed to check rate limit: Status Code {response.status_code}")
+# Check if the request was successful (status code 200)
+if response.status_code == 200:
+    # Parse the response JSON to get rate limit information
+    rate_limit_data = response.json()
+    print("Rate Limit Data:")
+    print(rate_limit_data)
+else:
+    print(f"Failed to check rate limit: Status Code {response.status_code}")

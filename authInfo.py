@@ -1,4 +1,4 @@
-token = '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'
+token = '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'
 
 dbName = 'ImageAnalysisData'
 dbUser = 'postgres'
