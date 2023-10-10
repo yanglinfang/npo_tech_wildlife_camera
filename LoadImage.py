@@ -84,97 +84,97 @@ headers = {
 # except Exception as e:
 #     print("Error:", e)
 
-# Retry times when failed to download image
-maxRetry = 10
+# # Retry times when failed to download image
+# maxRetry = 10
 
-# Dictionary to store image count inside each folder
-folderCounts = {}
+# # Dictionary to store image count inside each folder
+# folderCounts = {}
 
-# List to store values for all images
-brightnessVal = []
-redVal = []
-greenVal = []
-blueVal = []
+# # List to store values for all images
+# brightnessVal = []
+# redVal = []
+# greenVal = []
+# blueVal = []
 
-def load_image_from_folder(apiUrl, maxRetry = 10):
-    # Send HTTP GET request
-    response = requests.get(apiUrl, headers=headers)
+# def load_image_from_folder(apiUrl, maxRetry = 10):
+#     # Send HTTP GET request
+#     response = requests.get(apiUrl, headers=headers)
 
-    #Check if request was successful(status code 200)
-    if response.status_code == 200:
+#     #Check if request was successful(status code 200)
+#     if response.status_code == 200:
 
-        # Turn the folder into a file 
-        folderContents = response.json()
+#         # Turn the folder into a file 
+#         folderContents = response.json()
 
-        # Loop through contents of folder
-        for item in folderContents:
-            if item['type'] == 'dir':
-                subFolderUrl = item['url']
-                load_image_from_folder(subFolderUrl, maxRetry)
-            elif item['type'] == 'file':
-                # store directory path into dictionary, count how many images under same directory name
-                folderName = os.path.relpath(os.path.dirname(item['path']), "dataset")
-                folderCounts[folderName] = folderCounts.get(folderName, 0) + 1
+#         # Loop through contents of folder
+#         for item in folderContents:
+#             if item['type'] == 'dir':
+#                 subFolderUrl = item['url']
+#                 load_image_from_folder(subFolderUrl, maxRetry)
+#             elif item['type'] == 'file':
+#                 # store directory path into dictionary, count how many images under same directory name
+#                 folderName = os.path.relpath(os.path.dirname(item['path']), "dataset")
+#                 folderCounts[folderName] = folderCounts.get(folderName, 0) + 1
                 
-                fileName = item['name']
-                imageUrl = item['download_url']
-                print(fileName)
+#                 fileName = item['name']
+#                 imageUrl = item['download_url']
+#                 print(fileName)
                 
-                for retry in range(maxRetry):
-                    try:
-                        # Send an HTTP GET request to download the image
-                        imageResponse = requests.get(imageUrl, timeout=10)
+#                 for retry in range(maxRetry):
+#                     try:
+#                         # Send an HTTP GET request to download the image
+#                         imageResponse = requests.get(imageUrl, timeout=10)
 
-                        if imageResponse.status_code == 200:
-                            image_analyze(imageResponse.content)
-                            # data_upload(fileName, folderName, brightnessVal[-1], redVal[-1], greenVal[-1], blueVal[-1])
-                            break
-                    except requests.exceptions.RequestException as e:
-                        time.sleep(1)
-                else:
-                    print(f'Failed to downloadimage {fileName} after {maxRetry} retries')
-    else:
-        print(f'Failed to fetch folder: Status Code {response.status_code}')
+#                         if imageResponse.status_code == 200:
+#                             image_analyze(imageResponse.content)
+#                             # data_upload(fileName, folderName, brightnessVal[-1], redVal[-1], greenVal[-1], blueVal[-1])
+#                             break
+#                     except requests.exceptions.RequestException as e:
+#                         time.sleep(1)
+#                 else:
+#                     print(f'Failed to downloadimage {fileName} after {maxRetry} retries')
+#     else:
+#         print(f'Failed to fetch folder: Status Code {response.status_code}')
 
-# Function to call all analyzation of an image
-def image_analyze(content):
-    average_brightness_curve(content)
-    RGB_Distribution(content)
+# # Function to call all analyzation of an image
+# def image_analyze(content):
+#     average_brightness_curve(content)
+#     RGB_Distribution(content)
 
-# Function to analyze image brightness
-def average_brightness_curve(content):
-    # Decode image from bytes to an OpenCV image
-    imageNp = np.frombuffer(content, dtype = np.uint8)
-    image = cv2.imdecode(imageNp, cv2.IMREAD_COLOR)
+# # Function to analyze image brightness
+# def average_brightness_curve(content):
+#     # Decode image from bytes to an OpenCV image
+#     imageNp = np.frombuffer(content, dtype = np.uint8)
+#     image = cv2.imdecode(imageNp, cv2.IMREAD_COLOR)
 
-    # Convert image to grayscale
-    grayImg = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#     # Convert image to grayscale
+#     grayImg = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # Calculate average brightness (mean pixel value)
-    brightness = np.mean(grayImg)
+#     # Calculate average brightness (mean pixel value)
+#     brightness = np.mean(grayImg)
 
-    # Append brightness values into the list
-    brightnessVal.append(brightness)
+#     # Append brightness values into the list
+#     brightnessVal.append(brightness)
 
-def RGB_Distribution(content):
-    # Decode image from bytes to an OpenCV image
-    imageNp = np.frombuffer(content, dtype = np.uint8)
-    image = cv2.imdecode(imageNp, cv2.IMREAD_COLOR)
+# def RGB_Distribution(content):
+#     # Decode image from bytes to an OpenCV image
+#     imageNp = np.frombuffer(content, dtype = np.uint8)
+#     image = cv2.imdecode(imageNp, cv2.IMREAD_COLOR)
 
-    # Convert image to grayscale
-    blueChannel, greenChannel, redChannel = cv2.split(image)
+#     # Convert image to grayscale
+#     blueChannel, greenChannel, redChannel = cv2.split(image)
 
-    # Calculate average brightness (mean pixel value)
-    avgBlue = np.mean(blueChannel)
-    avgGreen = np.mean(greenChannel)
-    avgRed = np.mean(redChannel)
+#     # Calculate average brightness (mean pixel value)
+#     avgBlue = np.mean(blueChannel)
+#     avgGreen = np.mean(greenChannel)
+#     avgRed = np.mean(redChannel)
 
-    # Append brightness values into the list
-    blueVal.append(avgBlue)
-    greenVal.append(avgGreen)
-    redVal.append(avgRed)
+#     # Append brightness values into the list
+#     blueVal.append(avgBlue)
+#     greenVal.append(avgGreen)
+#     redVal.append(avgRed)
 
-load_image_from_folder(apiUrl, maxRetry)
+# load_image_from_folder(apiUrl, maxRetry)
 
 # rate_limit_url = 'https://api.github.com/rate_limit'
 # response = requests.get(rate_limit_url, headers=headers)
