@@ -1,2 +1,4 @@
 authInfo.py
 *.pyc
+boar_recognition.h5
+boar_recognition.keras
